@@ -1,0 +1,9 @@
+1. I'm using the multi-layer feedforward perceptron architecture with 4 hidden layers each consists of 32 neurons, and input and output layer that both consists 10 neurons, with each neuron having weights initialized using the variance scaling function, and the optimizer function that I use is the adam optimizer with a learning rate of 0.001 and the loss function that I use is the mean of the softmax cross-entropy (I use the softmax cross-entropy because it is well suited for multiclass classification problems) loss function over a batch of samples. 
+
+The reason I use this architecture because it is much simpler and easier approach to create a model to recognize handwritten digits data provided from the MNIST database as the theory behind it is less complex than using a convolutional neural network model (although convolutional neural network will produce even better accuracy results).
+
+2. I'm using the MNIST database which is a large database of handwritten digits that is commonly used for training various image processing systems. Each image contained in the database is formatted in a 28 pixel by 28 pixel grid with each pixel is represented by a single grayscale value between 0 to 255 which are used as the features of the dataset. The database has a total output class of 10 with each class corresponding to a decimal digit from 0 to 9.
+
+3. The kind of data that can be chosen as a target in the dataset is the output class label of the image, I use this as the target as it is the determining factor whether or not the model can correctly identify a handwritten decimal digit by comparing the predicted class label of the image with the true class label.
+
+- MY23-1
