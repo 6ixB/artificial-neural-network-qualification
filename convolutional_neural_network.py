@@ -2,7 +2,6 @@ import os
 
 import numpy as np
 import tensorflow as tf
-from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import OneHotEncoder
 
@@ -88,46 +87,30 @@ def main():
     correct_pred = tf.equal(tf.argmax(output, 1), tf.argmax(y, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
-    epochs = 10
+    epochs = 5
     batch_size = 128
 
     with tf.compat.v1.Session() as sess:
         sess.run(tf.compat.v1.global_variables_initializer())
 
         for epoch in range(epochs):
+            train_losses = []
+            train_accuracies = []
             for batch_x, batch_y in next_batch(batch_size, x_train, y_train):
-                sess.run(train_op, feed_dict={x: batch_x, y: batch_y, keep_prob: 0.5})
+                _, train_loss, train_acc = sess.run([train_op, loss, accuracy],
+                                                    feed_dict={x: batch_x, y: batch_y, keep_prob: 0.5})
+                train_losses.append(train_loss)
+                train_accuracies.append(train_acc)
 
+            train_loss_mean = np.mean(train_losses)
+            train_acc_mean = np.mean(train_accuracies)
             val_loss, val_acc = sess.run([loss, accuracy], feed_dict={x: x_val, y: y_val, keep_prob: 1.0})
-            print(f"Epoch {epoch + 1}/{epochs}, Validation Loss: {val_loss:.4f}, Validation Accuracy: {val_acc:.4f}")
+            print(f"Epoch {epoch + 1}/{epochs}, "
+                  f"Training Loss: {train_loss_mean:.4f}, Training Accuracy: {train_acc_mean:.4f}, "
+                  f"Validation Loss: {val_loss:.4f}, Validation Accuracy: {val_acc:.4f}")
 
         test_accuracy = sess.run(accuracy, feed_dict={x: x_test, y: y_test, keep_prob: 1.0})
         print(f"Test Accuracy: {test_accuracy:.4f}")
-
-        num_samples = 25
-        grid_size = 5
-        sample_indices = np.random.choice(len(x_test), num_samples)
-        sample_images = x_test[sample_indices]
-        sample_labels = y_test[sample_indices]
-
-        predictions = sess.run(output, feed_dict={x: sample_images})
-        predicted_labels = np.argmax(predictions, axis=1)
-        true_labels = np.argmax(sample_labels, axis=1)
-
-        fig, axes = plt.subplots(grid_size, grid_size, figsize=(20, 4))
-
-        for i in range(grid_size):
-            for j in range(grid_size):
-                index = i * grid_size + j
-                axes[i, j].imshow(sample_images[index].reshape(28, 28), cmap='gray')
-                axes[i, j].set_title(f'Predicted: {predicted_labels[index]}, True: {true_labels[index]}')
-                axes[i, j].axis('off')
-
-        manager = plt.get_current_fig_manager()
-        manager.window.showMaximized()
-
-        plt.tight_layout()
-        plt.show()
 
 
 if __name__ == '__main__':
