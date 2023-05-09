@@ -87,7 +87,7 @@ def main():
     correct_pred = tf.equal(tf.argmax(output, 1), tf.argmax(y, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_pred, tf.float32))
 
-    epochs = 5
+    epochs = 10
     batch_size = 128
 
     with tf.compat.v1.Session() as sess:
