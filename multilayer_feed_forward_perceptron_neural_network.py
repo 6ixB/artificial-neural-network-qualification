@@ -116,31 +116,6 @@ def main():
         test_accuracy = sess.run(accuracy, feed_dict={x: x_test, y: y_test})
         print(f"Test Accuracy: {test_accuracy:.4f}")
 
-        num_samples = 25
-        grid_size = 5
-        sample_indices = np.random.choice(len(x_test), num_samples)
-        sample_images = x_test[sample_indices]
-        sample_labels = y_test[sample_indices]
-
-        predictions = sess.run(output, feed_dict={x: sample_images})
-        predicted_labels = np.argmax(predictions, axis=1)
-        true_labels = np.argmax(sample_labels, axis=1)
-
-        fig, axes = plt.subplots(grid_size, grid_size, figsize=(20, 4))
-
-        for i in range(grid_size):
-            for j in range(grid_size):
-                index = i * grid_size + j
-                axes[i, j].imshow(sample_images[index].reshape(28, 28), cmap='gray')
-                axes[i, j].set_title(f'Predicted: {predicted_labels[index]}, True: {true_labels[index]}')
-                axes[i, j].axis('off')
-
-        manager = plt.get_current_fig_manager()
-        manager.window.showMaximized()
-
-        plt.tight_layout()
-        plt.show()
-
 
 if __name__ == '__main__':
     main()
